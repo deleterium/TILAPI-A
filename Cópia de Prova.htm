@@ -1,0 +1,235 @@
+<html><head>
+<title>TILAPI-A
+</title>
+<meta charset="utf-8">
+<style>
+body
+{
+	font: 10pt Cousine, monospace;
+	margin: 2em;
+}
+
+h1
+{
+	font-size: 14pt;
+	text-align: center;
+	margin-bottom: 2em;
+}
+
+tw-storydata
+{
+	display: block !important;
+}
+
+tw-passagedata
+{
+	display: block !important;
+	line-height: 200%;
+	margin-bottom: 2em;
+	white-space: pre-wrap;
+}
+
+tw-passagedata + tw-passagedata
+{
+	border-top: 1pt dashed black;
+	padding-top: 2em;
+}
+
+tw-passagedata:before
+{
+	content: attr(name);
+	display: block;
+	font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>TILAPI-A
+</h1>
+<tw-storydata name="TILAPI-A" startnode="1" creator="Twine" creator-version="2.3.9" ifid="D1C66ABD-F8FC-4EB6-8D86-40E15A1B236E" zoom="0.6" format="Harlowe" format-version="3.1.0" options="" hidden=""><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Início" tags="" position="2347.166666666667,8.166666666666622" size="200,100">&lt;div&gt;TILAPI-A | Tutorial de Instalação Linux e Árvore de Problemas de Inicialização - Abrangente | &amp;nbsp&amp;nbsp&amp;nbsp&amp;nbsp&amp;nbsp | Versão BETA 10.12.20&lt;/div&gt;
+
+&lt;div&gt;Em qual situação você se enquadra?&lt;/div&gt;
+* [[Quero aprender a fazer uma nova instalação|Tutorial Nova Instalação]]
+* [[Enfrento problemas ao tentar instalar uma distribuição Linux|Prob Nova Instalação]]
+* [[Acabei de instalar o sistema operacional mas o computador não iniciou o sistema operacional instalado|Problema no primero boot]]
+* [[O computador funcionava normalmente mas hoje não inicia mais|Problema genérico de boot]]</tw-passagedata><tw-passagedata pid="2" name="Prob Nova Instalação" tags="" position="1948.8333333333333,208.16666666666657" size="200,100">&lt;div&gt;Você reinicia o computador com a mídia de instalação preparada (seja pendrive/CD/DVD). O que acontece?&lt;/div&gt;
+* [[Aparece uma mensagem que não há sistema operacional|Alterar ordem de boot]]
+* [[O computador entra direto no sistema operacional que eu já tenho instalado|Alterar ordem de boot]]
+* [[Aparece a tela de inicialização do sistema operacional que estou tentando instalar|Boot de instalação OK]]
+</tw-passagedata><tw-passagedata pid="3" name="Problema no primero boot" tags="" position="2700.5,198.49999999999994" size="200,100">&lt;div&gt;Durante a instalação do sistema operacional apareceu alguma mensagem de erro "A execução de grub-install falhou"?&lt;/div&gt;
+(set: $setbootdefault to "1")
+* [[Sim|Erro grub-install]]
+* [[Não|Alterar ordem de boot]]</tw-passagedata><tw-passagedata pid="4" name="Problema genérico de boot" tags="" position="3120.1666666666665,201.49999999999997" size="100,100">A fazer</tw-passagedata><tw-passagedata pid="5" name="Alterar ordem de boot" tags="DIAG" position="1378.8333333333335,299.8333333333334" size="200,100">&lt;div&gt;Diagnóstico: Não foi selecionada a opção correta de inicialização do computador.&lt;/div&gt;
+
+Quando você quer iniciar um sistema operacional, deve selecionar a opção adequada na BIOS/Firmware do seu computador. Cada fabricante usa opções específicas, para isso você deve procurar informações no *manual do usuário* do seu computador/notebook/placa mãe. Alguns modelos fornecem uma tecla de atalho para seleção de boot, onde você poderá mudar o dispositivo de inicialização apenas para aquela vez. Se for esse seu caso, selecione o método conforme a sua mídia de instalação.
+
+Fique atento que há dois modos de inicialização: BIOS (ou Legacy) e UEFI. Um sistema instalado em um modo não irá iniciar em outro modo.
+
+(if: $setbootdefault is '1')[
+### Nova instalação sem conseguir iniciar
+Em alguns casos o instalador do ssitema não consegue alterar a opção padrão via sistema operacional. Você deve alterar manualmente a opção padrão de boot na BIOS. 
+Instalação feita em modo Legacy: deve-se selecionar como opção principal o disco onde foi instalado o sistema.
+Instalação feita em UEFI: deve-se alterar a ordem das entradas para selecionar a entrada de boot padrão. Haverá um nome amigável de acordo com o sistema que foi instalado para facilitar a escolha. Em algumas implementações também será necessário selecionar o disco onde foi feita a instalação do bootloader, ou seja, o disco que contém a partição EFI que foi selecionada na instalação. ]
+
+(if: $setbootdefault is '1')[[[Alterei a entrada padrão na BIOS e resolveu o problema|Fim do tutorial]]
+][[Conte-me mais sobre esses modos de inicialização|Tutorial Legacy x UEFI]] 
+(if: $setbootdefault is not '1')[[[Já sei disso, prosseguir para a instalação|Seleção de boot]]
+]
+
+</tw-passagedata><tw-passagedata pid="6" name="Problemas de vídeo" tags="" position="2172.8333333333335,597.5000000000001" size="200,100">### Hipótese 1: 
+O sistema operacional não conseguiu detectar corretamente o modelo e opções do vídeo.
+
+Possíveis soluções:
+0. Tente iniciar a instalação com alguma opção mais avançada como **Safe Graphics**, **Fail safe** ou **Text Mode**
+0. Tente editar a opção de boot. Caso o sistema operacional use GRUB, apertando a tecla **e** você poderá editar os comandos de inicialização e adicionar a opção **nomodeset** no final da linha que começa com **linux** [[Quero ver um vídeo sobre isso|Adicionar opções do kernel no GRUB]] (set: $kernelaction to "adicione", $kernelparameter to "nomodeset") 
+0. Procure ajuda da comunidade, informe o modelo do computador, modelo da placa de vídeo e o sistema operacional que está tentando instalar. 
+
+### Hipótese 2:
+Há problema de hardware na conexão da sua placa de vídeo até o monitor.
+Possíveis soluções:
+0. Tente conectar melhor o cabo de vídeo no computador e no monitor. 
+0. Se houver outra saída de vídeo disponível, tente usá-la (ex. Usar a saída HDMI em vez da DisplayPort)
+0. Se a configuração funciona em outros sistemas operacionais, desconsidere essa opção.
+
+[[Fim do tutorial]] </tw-passagedata><tw-passagedata pid="7" name="Problemas de teclado" tags="Pronto" position="1876.1666666666667,600.1666666666666" size="200,100">Quando você inicia o computador, consegue entrar na BIOS/Firmware e o teclado funciona lá?
+
+[[Sim e meu teclado é USB|Problema de detecção de hardware USB]]
+[[Sim e meu teclado é PS2|Erro desconhecido]]
+[[Não|Hardware de teclado defeituoso]]</tw-passagedata><tw-passagedata pid="8" name="Problema de detecção de hardware USB" tags="Pronto DIAG" position="1600.1666666666667,805.8333333333333" size="200,100">&lt;div&gt;Diagnóstico: Provavelmente o problema não é com o teclado, mas sim do sistema operacional em detectar o dispositivo USB no qual o seu teclado está conectado.&lt;/div&gt;
+
+Possíveis soluções:
+* Se a sua placa mãe é Gigabyte 970A-DS3P, você deve ativar o suporte ao iommu na BIOS/Firmware. Em alguns sistemas operacionais também é preciso adicionar as opções de kernel **`amd_iommu=on iommu=pt`** no boot.
+* Tente adicionar **`usbcore.old_scheme_first=1`** como parâmetro do kernel para dar boot. Isso pode ser útil para alguns hardwares USB antigos e fará o teclado funcionar.
+* Mude a porta USB onde o teclado está conectado. Algumas placas possuem portas USB em mais de um hardware. Outras ainda tem uma opção na Bios/Firmware para "legacy USB" que pode ativar o funcionamento do teclado USB como se fosse PS2 e o sistema operacional vai funcionar.
+
+[[Quero ver um vídeo sobre adicionar opções do kernel|Adicionar opções do kernel no GRUB]] (set: $kernelaction to "adicione", $kernelparameter to "`amd_iommu=on iommu=pt ou usbcore.old_scheme_first=1`") 
+
+* As soluções resolveram o problema [[Fim do tutorial]] 
+* Ainda tenho problemas [[Fim do tutorial]]</tw-passagedata><tw-passagedata pid="9" name="Erro desconhecido" tags="DIAG Pronto" position="1824.4999999999998,798.1666666666666" size="200,100">&lt;div&gt;Diagnóstico: Erro muito estranho, provavelmente falha de hardware do teclado&lt;/div&gt;
+
+Possível solução: Tente usar outro teclado.
+
+* As soluções resolveram o problema [[Fim do tutorial]] 
+* Ainda tenho problemas [[Fim do tutorial]]</tw-passagedata><tw-passagedata pid="10" name="Hardware de teclado defeituoso" tags="DIAG Pronto" position="2054.5,800.8333333333334" size="200,100">&lt;div&gt;Diagnóstico: Seu teclado possivelmente está com defeito ou sem pilhas (no caso de teclados wireless).&lt;/div&gt;
+
+Possível solução: Use outro teclado.
+
+* As soluções resolveram o problema [[Fim do tutorial]] 
+* Ainda tenho problemas [[Fim do tutorial]]</tw-passagedata><tw-passagedata pid="11" name="Tutorial Nova Instalação" tags="" position="703.3333333333335,196.5" size="200,100">&lt;div&gt;Há dois modos de inicialização do computador. É de extrema importância que o usuário que vai fazer uma nova instalação saiba diferenciar, identificar e escolher o modo mais adequado.&lt;/div&gt;
+
+[[Fazer o tutorial Legacy x UEFI para saber mais sobre o assunto|Tutorial Legacy x UEFI]]
+[[Sou experiente nisso, leve-me às opções|Seleção de boot]]</tw-passagedata><tw-passagedata pid="12" name="Adicionar opções do kernel no GRUB" tags="" position="2487.833333333334,712.5" size="200,100">O vídeo trata sobre adicionar as opções do kernel **quiet splash**. No seu caso (str: $kernelaction) **(str: $kernelparameter)**
+
+&lt;iframe width="854" height="480" src="https://www.youtube.com/embed/bxZoHZgTimw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+</tw-passagedata><tw-passagedata pid="13" name="Dual Boot Windows" tags="" position="623.3333333333334,598.1666666666666" size="100,100">A Fazer</tw-passagedata><tw-passagedata pid="14" name="Dual boot Linux" tags="" position="821.6666666666669,596.5" size="100,100">A fazer</tw-passagedata><tw-passagedata pid="15" name="Instalação disco inteiro" tags="" position="1232.1666666666667,599.8333333333333" size="200,100">Este é o modo mais fácil de instalação. Todos os dados existentes no disco serão apagados e o sistema operacional vai usar as opções padrão programadas pelos seus desenvoledores.
+
+Alguns cuidados devem ser tomados, especialmente se há mais de um disco no computador. Esteja certo sobre o nome do disco, fabricante e capacidade antes de iniciar a instalação. O modo mais seguro é desconectar o disco que tenha dados importantes, para ficar com os dados salvos de forma offline.
+
+Caso tenha em mente testar outros sistemas operacionais no futuro, prefira já configurar sua BIOS/Firmware em modo apenas UEFI. Irá facilitar futuras instalações. Essa informação está sempre presente no manual de usuário do seu notebook ou placa mãe.
+
+Então mãos à obra! Uma vantagem desse tipo de instalação é que você pode usar e abusar das configurações de instalação, uma vez que decida algo diferente é só iniciar novamente e sobrescrever o disco inteiro.
+
+[[Obrigado!|Fim do tutorial]]</tw-passagedata><tw-passagedata pid="16" name="Tutorial Legacy x UEFI" tags="" position="418.3333333333335,396.49999999999994" size="200,100">### Legacy
+Legacy, ou Herdado, ou BIOS, é um tipo de boot bastante antigo criado nos anos 80. Seu funcionamento é bastante simples e fica carregado nos primeiros 512 bytes do disco. Nesses dados também está incluído o formato de particionamento dos disco do tipo MBR, ou DOS, ou MSDOS (diferentes nomes para a mesma coisa).
+
+Vantagens:
+* Extremamente simples operação no caso de usar apenas um sistema operacional.
+* Fácil configuração na BIOS/Firmware do computador. O usuário precisa apenas indicar qual o disco que quer inicializar.
+Desvantagens:
+* Não possui suporte a multi boot, ou seja, cada sistema operacional que for instalado vai sobrescrever a inicialização do anterior.
+* Configuração do particionamento de disco mais difícil, pois tem limitação de no máximo 4 partições primárias. Caso necessário mais partições, uma dessas partições primárias precisa ser do tipo extendida até o final do disco, para serem criadas partições lógicas dentro dela.
+* Limitação de discos de no máximo 2 terabytes.
+
+### UEFI
+Criado nos anos 2000 principalmente pela Intel para uso em servidores e comumente usada nos computadores pessoais após 2014, visou ultrapassar os limites do modo Legacy. Com especificação mais complexa, necessita de firmwares maiores, sendo comum ter uma apresentação gráfica melhor acabada e a possibilidade de usar o mouse para selecionar opções. Necessita que o particionamento do disco seja do tipo GPT para encontrar os bootloaders dos sistemas operacionais instalados.
+
+Principais vantagens:
+* Suporta até 128 partições por disco, todas elas primárias.
+* Suporta discos de tamanhos inimagináveis (9 bilhões de terabytes).
+* Acomoda até 127 sistemas operacionais instalados no mesmo disco, cada um com seu inicializador.
+* Suporta modo de boot seguro, que pode impedir carregamento de sistemas que não contenham assinatura digital autorizada.
+Desvantagens:
+* Necessita de pelo menos uma partição específica para o bootloaders dos sistemas operacionais. Essa partição precisa ser do tipo EFI e formatada com sistema de arquivos **vfat** ou **fat32**
+* Há diferentes versões da implementação UEFI, o que faz que diferentes modelos de placas mãe de diferentes fabricantes possam ter comportamento um pouco diferente. Implementações completas podem deixar o usuário criar entradas no próprio Firmware, enquanto outras mais simples podem não suportar mais de uma partição EFI.
+* Complexidade pro usuário em um primeiro contato: dor de aprender.
+
+### Qual devo escolher?
+Um novo usuário que nunca teve contato com sistemas de inicialização e vai aprender algo novo deve aprender logo o modelo mais recente: UEFI. Já para quem vai instalar apenas um sistema operacional, pode deixar o próprio sistema escolher, não importando qual deles será instalado. O problema principal ocorre quando já há um sistema operacional instalado e o disco particionado, pois nesse caso o usuário precisará manter o modo atual. Trocar o modo de instalação de um sistema operacional de Legacy para UEFI (ou vice versa) é um processo complicado, geralmente sendo mais fácil fazer backup dos dados e proceder uma nova instalação do zero de todos os sistemas operacionais. Um ótimo momento para fazer isso é quando se tem um novo disco, o usuário sabe que vai usar multi boot e já começa a fazer as instalações naquele disco em modo UEFI.
+
+### Mais informação
+O assunto é extenso mas há muita informação na internet. Novos usuários que vão fazer seu primeiro dual boot devem se informar mais. Recomendo o vídeo Modelo Mental do boot (20 a 40 minutos dependendo da velocidade de reprodução) do Prof Kretcheu para ter uma visão geral do processo de inicialização do computador:
+
+&lt;iframe width="854" height="480" src="https://www.youtube.com/embed/neLmvi4OJDo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+[[Continuar|Seleção de boot]]</tw-passagedata><tw-passagedata pid="17" name="Seleção de boot" tags="" position="731.6666666666669,393.16666666666663" size="200,100">&lt;div&gt;O que você gostaria de fazer?&lt;/div&gt;
+
+[[Já tenho o Windows instalado e gostaria de instalar uma distribuição Linux|Dual Boot Windows]]
+[[Já tenho uma distro Linux instalada e gostaria de instalar outra|Dual boot Linux]]
+[[Quero fazer uma instalação no disco inteiro|Instalação disco inteiro]]
+[[Quero instalar ou reinstalar um sistema mantendo uma partição específica|Instalação com particionamento manual]]</tw-passagedata><tw-passagedata pid="18" name="Fim do tutorial" tags="" position="1677.1666666666667,2699.8333333333335" size="100,100">### Mais dúvidas?
+Procure por apoio na comunidade, há dezenas de pessoas que podem ajudá-lo. Recomendo o forum do Diolinux, onde há muita informação já disponível e você poderá criar seus próprios tópicos com perguntas - https://plus.diolinux.com.br/
+
+### Quer ajudar ou contribuir?
+O site usa o http://twinery.org/2/ como motor. Embora os arquivos não sejam amigáveis para colaboração no estilo git, o esqueleto ficará disponível no endereço https://github.com/deleterium/TILAPI-A para colaboração. Também há um tópico de discussão em XXXXXX
+
+### Desenvolvimento
+Rui Deleterium Jr - https://github.com/deleterium
+
+Obrigado</tw-passagedata><tw-passagedata pid="19" name="Instalação com particionamento manual" tags="" position="988.8333333333334,601.5" size="200,100">Você já deve saber alguma coisa sobre particionamento de disco para chegar até aqui. O mínimo necessário para prosseguir com segurança é saber responder as perguntas:
+
+A mídia de instalação está sendo executada em modo UEFI ou Legacy?
+
+Meu disco já possui particionamento GPT ou MBR (também conhecido como DOS ou MSDOS)?
+
+Qual é o número partição e o nome do disco (código de fábrica) que quero manter?
+
+Possuo backup dos arquivos caso aconteça algo muito errado e eu perca a informação desse disco?
+
+Alguns pontos podem dificultar a instalação:
+* Se a instalação for efetuada em modo UEFI e o disco tiver particionamento MBR, coisas estranhas podem acontecer. Isso pois o instalador terá que converter o particionamento atual para prosseguir com a instalação. Evite esse tipo de situação. Se estiver muito receoso de perder os dados, prefira realizar a instalação do sistema em modo Legacy.
+* Se a instalação for realizada em modo Legacy e o disco tiver particionamento GPT, será necessário criar uma partição do tipo "biosgrub" para alojar o bootloader padrão do linux (o GRUB). Isso aumenta a complexidade da operação e chances de erro. Realize a instalação em UEFI para não precisar dessa artimanha.
+
+[[Quero saber mais sobre Legacy e UEFI|Tutorial Legacy x UEFI]]
+[[Prosseguir para instalação|Como instalar a distribuição linux]]</tw-passagedata><tw-passagedata pid="20" name="Como instalar a distribuição linux" tags="" position="998.3333333333335,2341.5" size="200,100">Esse tutorial é abrangente, não cabe entrar em detalhes das particularidades de instalação de cada distribuição Linux. Procure mais informações para prosseguir a instalação e tenha em mente para seguir tutoriais adequados ao tipo de boot que você escolheu e adequado à distribuição. 
+
+Se você precisa fazer particionamento manual, procure mais informações específicas sobre o assunto. É muito importante saber definir os pontos de montagem de cada partição para uma instalação correta.
+
+Você já conhece o site da distribuição que escolheu para instalar, pelo menos para fazer o Download da ISO. Explore mais o site. Há partes específicas para ajudar o processo de instalação, com tutoriais passo a passo para as situações mais comuns. 
+
+[[Fim do tutorial]] </tw-passagedata><tw-passagedata pid="21" name="Erro grub-install" tags="" position="2763.833333333333,441.83333333333326" size="200,100">A instalação prosseguiu e foi realizada toda a cópia de arquivos e instalação do sistema na partição raiz. A última etapa a ser realizada é a instalação do bootloader, no caso da grande maioria das distribuições é usado o programa GRUB.
+
+Na sua instalação essa etapa terminou com erro. Os instaladores não dão mais detalhes sobre o erro que ocorreu, portanto não há como saber exatamente o diagnóstico. Entre os problemas mais comuns temos:
+
+### Instalações feitas em modo UEFI
+Hipótese 1) Comum - Para a instalação do GRUB foi selecionado um disco que não tem partição UEFI, ou então foi selecionada uma partição que não é do tipo EFI.
+Solução: Escolha corretamente o disco para instalação do GRUB. Na dúvida escolha o dispositivo do disco (ex : /dev/sda em vez de /dev/sda1). Tenha certeza que nesse disco existe uma partição EFI criada de acordo com as especificações: 1) disco com partição GPT, 2) tipo de partição EFI e 3) formatado com sistema de arquivos fat32.
+
+Hipótese 2) Raro - Não há espaço na partição EFI para instalar os arquivos do GRUB.
+Solução: Garanta que há pelo menos 10 megabytes livres para os arquivos serem copiados para a partição. Uma solução alternativa é criar uma segunda partição EFI no mesmo disco e escolher essa partição para instalação do GRUB. A maioria dos Firmwares/BIOS detecta corretamente essa situação.
+
+Hipótese 3) Raro - Não foi configurado o ponto de montagem /boot/efi durante a etapa de particionamento manual do disco. Muitos instaladores já são capazes de verificar essa condição e barram a continuação da instalação.
+Solução: Na etapa de particionamento manual adicione o ponto de montagem /boot/efi na respectiva partição EFI do disco.
+
+Hipótese 4) Raríssimo - Não há espaço na NVRAM da BIOS/Firmware para acomodar mais uma entrada de boot. Isso pode acontecer quando há muita instalação e desinstalação de sistemas operacionais.
+Solução: Através de um sistema funcionando ou LiveCD, verifique o se há muitos arquivos "dump*" no diretório /sys/firmware/efi/efivars/ ( `ls /sys/firmware/efi/efivars/dum*` ) e remova-os ( `rm /sys/firmware/efi/efivars/dum*` ). Tente a instalação novamente ou, se for usuário avançado, use o comando efibootmgr para criar uma nova entrada de boot manualmente.
+
+### Instalações feitas em modo Legacy
+Hipótese 1) Raro - Para a instalação do GRUB foi selecionada uma partição, em vez de um disco.
+Solução: Escolha corretamente o disco para instalação do GRUB. Não escolha instalar em uma partição. Correto: /dev/sda Errado: /dev/sda2. Lembre-se que o modo Legacy só suporta um programa gerenciador de boot por disco.
+
+* As soluções resolveram o problema [[Fim do tutorial]] 
+* Ainda tenho problemas [[Fim do tutorial]]</tw-passagedata><tw-passagedata pid="22" name="Boot de instalação OK" tags="" position="1887.1666666666665,393.50000000000006" size="200,100">Ótimo, você conseguiu iniciar o computador no sistema operacional desejado. Vamos tratar alguns problemas comuns que podem acontecer durante a instalação.
+
+O que acontece durante a instalação?
+
+* [[Quando eu tento avançar a imagem fica distorcida ou a tela fica preta|Problemas de vídeo]]
+* [[Quando eu tento avançar o teclado não funciona|Problemas de teclado]]
+* [[Começo a instalação mas não sei direito como instalar o sistema|Como instalar a distribuição linux]] 
+* [[Sigo a instalação até o momento de instalar o bootloader, quando há um erro fatal "A execução de grub-install falhou"|Erro grub-install]]</tw-passagedata></tw-storydata>
+
+
+
+
+</body></html>
